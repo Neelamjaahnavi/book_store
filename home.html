@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>BookHaven - Home</title>
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <nav class="navbar">
+        <h2>BookHaven</h2>
+        <a href="index.html" onclick="localStorage.clear()">Logout</a>
+    </nav>
+    <div class="container main-content">
+        <h1>Welcome, <span id="userDisplay">Reader</span></h1>
+        <div class="menu-grid">
+            <div class="menu-card" onclick="location.href='catalogue.html'">
+                <div class="icon">📖</div>
+                <h3>Browse Catalogue</h3>
+            </div>
+            <div class="menu-card" onclick="location.href='cart.html'">
+                <div class="icon">🛒</div>
+                <h3>View My Cart</h3>
+            </div>
+        </div>
+    </div>
+    <script>document.getElementById('userDisplay').innerText = localStorage.getItem('user') || 'Reader';</script>
+</body>
+</html>
