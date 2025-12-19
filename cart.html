@@ -2,86 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BookHaven - Your Cart</title>
+    <title>BookHaven - Cart</title>
     <link rel="stylesheet" href="base.css">
-    <link rel="stylesheet" href="cart.css">
+    <style>
+        .cart-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .cart-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .total-row { text-align: right; margin-top: 30px; padding-top: 20px; border-top: 3px solid var(--accent); font-size: 1.5rem; font-weight: bold; }
+        .remove-btn { background: #ff4757; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+    </style>
 </head>
 <body>
     <nav class="navbar">
-        <div class="brand">
+        <div class="nav-content">
             <a href="home.html" class="brand-link">📚 BookHaven</a>
-        </div>
-        <div class="nav-links">
-            <a href="home.html">Home</a>
-            <a href="catalogue.html">Catalogue</a>
+            <div class="nav-links"><a href="catalogue.html">Catalogue</a></div>
         </div>
     </nav>
-
     <div class="container">
-        <div class="cart-wrapper">
-            <h1>Shopping Cart</h1>
+        <div class="cart-box">
+            <h1>Your Cart</h1>
             <div id="cartList"></div>
-            <div id="cartSummary" class="summary-box"></div>
+            <div id="summary"></div>
         </div>
     </div>
-
     <script>
-        function renderCart() {
+        function render() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const list = document.getElementById('cartList');
-            const summary = document.getElementById('cartSummary');
-
-            // Reset views to prevent "₹0₹599" stacking
-            list.innerHTML = "";
-            summary.innerHTML = "";
+            const summary = document.getElementById('summary');
+            
+            list.innerHTML = ""; summary.innerHTML = "";
 
             if (cart.length === 0) {
-                list.innerHTML = "<div class='empty-msg'>Your cart is empty. <a href='catalogue.html'>Go Shopping</a></div>";
+                list.innerHTML = "<h3>Cart is empty</h3>";
                 return;
             }
 
-            let totalAmount = 0;
-
-            cart.forEach((item, index) => {
-                // Force price to be a number
-                const price = Number(item.price);
-                totalAmount += price;
-
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'cart-item';
-                itemDiv.innerHTML = `
-                    <div class="item-info">
-                        <span>📖</span>
-                        <strong>${item.title}</strong>
-                    </div>
-                    <div class="item-actions">
-                        <span>₹${price}</span>
-                        <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
-                    </div>
-                `;
-                list.appendChild(itemDiv);
+            let total = 0;
+            cart.forEach((item, i) => {
+                total += Number(item.price);
+                list.innerHTML += `<div class="cart-item">
+                    <span>📘 ${item.title}</span>
+                    <span>Rs.${item.price} <button class="remove-btn" onclick="remove(${i})">Remove</button></span>
+                </div>`;
             });
 
-            // Display ONLY the final total once
-            summary.innerHTML = `
-                <div class="total-row">
-                    <span>Total Amount:</span>
-                    <span class="total-price">₹${totalAmount}</span>
-                </div>
-                <button class="btn checkout-btn" onclick="location.href='payment.html'">
-                    Proceed to Payment
-                </button>
-            `;
+            summary.innerHTML = `<div class="total-row">Total: Rs.${total}</div>
+                <button class="btn" style="width:100%; margin-top:20px" onclick="location.href='payment.html'">Pay Now</button>`;
         }
-
-        function removeItem(index) {
+        function remove(i) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart.splice(index, 1);
+            cart.splice(i, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
-            renderCart();
+            render();
         }
-
-        renderCart();
+        render();
     </script>
 </body>
 </html>
