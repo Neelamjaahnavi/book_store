@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookHaven - Your Cart</title>
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="cart.css">
@@ -27,21 +28,35 @@
 
     <script>
         function renderCart() {
+            // Retrieve cart from local storage
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const list = document.getElementById('cartList');
             const summary = document.getElementById('cartSummary');
 
-            // Clear previous content to avoid "stacking" totals
+            // IMPORTANT: Clear both areas first to prevent "₹0₹599" stacking
             list.innerHTML = "";
             summary.innerHTML = "";
 
             if (cart.length === 0) {
-                list.innerHTML = "<div class='empty-msg'>Your cart is empty. <a href='catalogue.html'>Go back to shopping</a></div>";
+                list.innerHTML = `
+                    <div style="text-align:center; padding: 20px;">
+                        <p>Your cart is empty.</p>
+                        <a href="catalogue.html" class="btn" style="text-decoration:none; display:inline-block; margin-top:10px;">Go Shopping</a>
+                    </div>`;
                 return;
             }
 
-            // Display each item
+            let runningTotal = 0;
+
+            // Loop through items and build the list
             cart.forEach((item, index) => {
+                // Ensure price is a number. If it contains "₹", we remove it.
+                const priceValue = typeof item.price === 'string' 
+                    ? parseFloat(item.price.replace(/[^\d.]/g, '')) 
+                    : item.price;
+
+                runningTotal += priceValue;
+
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'cart-item';
                 itemDiv.innerHTML = `
@@ -50,21 +65,18 @@
                         <strong>${item.title}</strong>
                     </div>
                     <div class="item-price-group">
-                        <span>₹${item.price}</span>
+                        <span>₹${priceValue}</span>
                         <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
                     </div>
                 `;
                 list.appendChild(itemDiv);
             });
 
-            // Calculate ONLY the final total
-            const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
-
-            // Render the total and payment button
+            // After the loop, update the summary area ONCE
             summary.innerHTML = `
                 <div class="total-row">
                     <span>Final Total:</span>
-                    <span class="total-amount">₹${total}</span>
+                    <span class="total-amount">₹${runningTotal}</span>
                 </div>
                 <button class="btn checkout-btn" onclick="location.href='payment.html'">
                     Proceed to Payment
@@ -76,10 +88,10 @@
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
-            renderCart(); // Refresh the page instantly
+            renderCart(); // Instantly refresh the UI
         }
 
-        // Run on page load
+        // Initialize the page
         renderCart();
     </script>
 </body>
