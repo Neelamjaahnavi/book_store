@@ -1,0 +1,29 @@
+.main-content {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.menu-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.menu-card {
+    background: white;
+    padding: 50px;
+    border-radius: 15px;
+    width: 200px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.menu-card:hover {
+    transform: translateY(-10px);
+    background: var(--primary);
+    color: white;
+}
+
+.icon { font-size: 50px; margin-bottom: 10px; }
