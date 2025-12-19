@@ -1,0 +1,25 @@
+.cart-page { background: white; margin-top: 30px; border-radius: 10px; padding: 40px; }
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.remove-btn {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.summary-box {
+    margin-top: 30px;
+    text-align: right;
+    border-top: 2px solid var(--accent);
+}
+
+.checkout-btn { width: 100%; margin-top: 20px; font-size: 1.1rem; }
