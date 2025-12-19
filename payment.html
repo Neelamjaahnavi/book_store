@@ -1,26 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>BookHaven - Payment</title>
+    <title>BookHaven - Secure Payment</title>
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="payment.css">
 </head>
 <body>
     <div class="pay-wrapper">
         <div class="pay-card">
-            <h2>Payment Details</h2>
-            <input type="text" placeholder="Cardholder Name">
-            <input type="text" placeholder="Card Number">
-            <div class="row">
-                <input type="text" placeholder="MM/YY">
-                <input type="password" placeholder="CVV">
+            <h2>Select Payment Method</h2>
+            
+            <div class="payment-options">
+                <label class="method-label">
+                    <input type="radio" name="payMethod" value="upi" checked onclick="toggleFields('upi')">
+                    <span>UPI (Google Pay, PhonePe)</span>
+                </label>
+
+                <label class="method-label">
+                    <input type="radio" name="payMethod" value="card" onclick="toggleFields('card')">
+                    <span>Debit / Credit Card</span>
+                </label>
+
+                <label class="method-label">
+                    <input type="radio" name="payMethod" value="net" onclick="toggleFields('net')">
+                    <span>Net Banking</span>
+                </label>
             </div>
+
+            <hr>
+
+            <div id="upiFields">
+                <input type="text" placeholder="Enter UPI ID (e.g., user@okaxis)">
+            </div>
+
+            <div id="cardFields" style="display:none;">
+                <input type="text" placeholder="Card Number">
+                <div class="row">
+                    <input type="text" placeholder="MM/YY">
+                    <input type="password" placeholder="CVV">
+                </div>
+            </div>
+
+            <div id="netFields" style="display:none;">
+                <select class="full-select">
+                    <option>Select your Bank</option>
+                    <option>State Bank of India</option>
+                    <option>HDFC Bank</option>
+                    <option>ICICI Bank</option>
+                </select>
+            </div>
+
             <button class="btn pay-btn" onclick="done()">Pay Now</button>
         </div>
     </div>
+
     <script>
+        function toggleFields(method) {
+            document.getElementById('upiFields').style.display = method === 'upi' ? 'block' : 'none';
+            document.getElementById('cardFields').style.display = method === 'card' ? 'block' : 'none';
+            document.getElementById('netFields').style.display = method === 'net' ? 'block' : 'none';
+        }
+
         function done() {
-            alert("Payment Success!");
+            alert("Payment Success! Your order has been placed.");
             localStorage.removeItem('cart');
             window.location.href = 'home.html';
         }
