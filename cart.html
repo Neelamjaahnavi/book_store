@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookHaven - Your Cart</title>
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="cart.css">
 </head>
 <body>
     <nav class="navbar">
-        <div class="brand"><h2>📚 BookHaven</h2></div>
+        <div class="brand">
+            <a href="home.html" class="brand-link">📚 BookHaven</a>
+        </div>
         <div class="nav-links">
             <a href="home.html">Home</a>
             <a href="catalogue.html">Catalogue</a>
@@ -19,64 +20,53 @@
     <div class="container">
         <div class="cart-wrapper">
             <h1>Shopping Cart</h1>
-            
             <div id="cartList"></div>
-            
             <div id="cartSummary" class="summary-box"></div>
         </div>
     </div>
 
     <script>
         function renderCart() {
-            // Retrieve cart from local storage
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const list = document.getElementById('cartList');
             const summary = document.getElementById('cartSummary');
 
-            // IMPORTANT: Clear both areas first to prevent "₹0₹599" stacking
+            // Reset views to prevent "₹0₹599" stacking
             list.innerHTML = "";
             summary.innerHTML = "";
 
             if (cart.length === 0) {
-                list.innerHTML = `
-                    <div style="text-align:center; padding: 20px;">
-                        <p>Your cart is empty.</p>
-                        <a href="catalogue.html" class="btn" style="text-decoration:none; display:inline-block; margin-top:10px;">Go Shopping</a>
-                    </div>`;
+                list.innerHTML = "<div class='empty-msg'>Your cart is empty. <a href='catalogue.html'>Go Shopping</a></div>";
                 return;
             }
 
-            let runningTotal = 0;
+            let totalAmount = 0;
 
-            // Loop through items and build the list
             cart.forEach((item, index) => {
-                // Ensure price is a number. If it contains "₹", we remove it.
-                const priceValue = typeof item.price === 'string' 
-                    ? parseFloat(item.price.replace(/[^\d.]/g, '')) 
-                    : item.price;
-
-                runningTotal += priceValue;
+                // Force price to be a number
+                const price = Number(item.price);
+                totalAmount += price;
 
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'cart-item';
                 itemDiv.innerHTML = `
                     <div class="item-info">
-                        <span class="item-icon">📘</span>
+                        <span>📖</span>
                         <strong>${item.title}</strong>
                     </div>
-                    <div class="item-price-group">
-                        <span>₹${priceValue}</span>
+                    <div class="item-actions">
+                        <span>₹${price}</span>
                         <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
                     </div>
                 `;
                 list.appendChild(itemDiv);
             });
 
-            // After the loop, update the summary area ONCE
+            // Display ONLY the final total once
             summary.innerHTML = `
                 <div class="total-row">
-                    <span>Final Total:</span>
-                    <span class="total-amount">₹${runningTotal}</span>
+                    <span>Total Amount:</span>
+                    <span class="total-price">₹${totalAmount}</span>
                 </div>
                 <button class="btn checkout-btn" onclick="location.href='payment.html'">
                     Proceed to Payment
@@ -88,10 +78,9 @@
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
-            renderCart(); // Instantly refresh the UI
+            renderCart();
         }
 
-        // Initialize the page
         renderCart();
     </script>
 </body>
