@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar">
         <div class="nav-content">
-            <a href="home.html" class="brand-link">📚 Book Store</a>
+            <a href="home.html" class="brand-link"> Book Store</a>
             <div class="nav-links">
                 <a href="catalogue.html">Continue Shopping</a>
             </div>
@@ -18,9 +18,7 @@
 
     <div class="container">
         <h1>Your Shopping Cart</h1>
-        
         <div id="cartList"></div>
-        
         <div id="summaryArea"></div>
     </div>
 
@@ -30,46 +28,50 @@
             const list = document.getElementById('cartList');
             const summary = document.getElementById('summaryArea');
             
+            // Clear containers to prevent stacking and clear old errors
             list.innerHTML = ""; 
             summary.innerHTML = ""; 
 
             if (cart.length === 0) {
-                list.innerHTML = `
-                    <div style="text-align:center; padding: 40px;">
-                        <h3>Your cart is empty.</h3>
-                        <a href="catalogue.html" class="btn" style="text-decoration:none; display:inline-block; margin-top:15px;">Browse Books</a>
-                    </div>`;
+                list.innerHTML = "<div style='text-align:center;'><h3>Your cart is empty.</h3></div>";
                 return;
             }
 
             let total = 0;
 
             cart.forEach((item, i) => {
-                const price = typeof item.price === 'string' 
-                    ? parseFloat(item.price.replace(/[^\d.]/g, '')) 
-                    : item.price;
+                // FIX: This regex removes everything except numbers and dots
+                // It prevents the NaN error by stripping the "₹" symbol
+                let priceValue = 0;
+                if (typeof item.price === 'string') {
+                    priceValue = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
+                } else {
+                    priceValue = Number(item.price) || 0;
+                }
                 
-                total += price;
+                total += priceValue;
 
+                // Create orderly row
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'cart-item';
                 itemDiv.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 15px;">
-                        <span style="font-size: 1.5rem;">📘</span>
+                        <span>📘</span>
                         <strong>${item.title}</strong>
                     </div>
                     <div style="display: flex; align-items: center; gap: 20px;">
-                        <span style="font-weight: bold;">₹${price}</span>
+                        <span>₹${priceValue}</span>
                         <button onclick="remove(${i})" style="color:#ff4757; border: 1px solid #ff4757; background:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Remove</button>
                     </div>
                 `;
                 list.appendChild(itemDiv);
             });
 
+            // Render summary with the single math result
             summary.innerHTML = `
                 <div class="total-box">
-                    <h2 style="margin-bottom: 15px;">Total: ₹${total}</h2>
-                    <button class="btn" style="width:100%;" onclick="location.href='payment.html'">Proceed to Payment</button>
+                    <h2>Total: ₹${total.toFixed(2)}</h2>
+                    <button class="btn" style="width:100%; margin-top:10px" onclick="location.href='payment.html'">Proceed to Payment</button>
                 </div>`;
         }
 
@@ -77,7 +79,7 @@
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart.splice(i, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
-            render(); 
+            render();
         }
 
         render();
