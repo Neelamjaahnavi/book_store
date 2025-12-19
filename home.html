@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>BookHaven - Home</title>
     <link rel="stylesheet" href="base.css">
-    <link rel="stylesheet" href="home.css">
+    <style>
+        .menu-grid { display: flex; justify-content: center; gap: 30px; margin-top: 50px; }
+        .menu-card { background: white; padding: 50px; border-radius: 15px; width: 220px; text-align: center; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; }
+        .menu-card:hover { transform: translateY(-10px); background: #f0fdf4; }
+        .icon { font-size: 60px; margin-bottom: 15px; }
+    </style>
 </head>
 <body>
     <nav class="navbar">
-        <h2>BookHaven</h2>
-        <a href="index.html" onclick="localStorage.clear()">Logout</a>
+        <div class="nav-content">
+            <a href="home.html" class="brand-link">📚 BookHaven</a>
+            <div class="nav-links"><a href="index.html">Logout</a></div>
+        </div>
     </nav>
-    <div class="container main-content">
+    <div class="container" style="text-align: center;">
         <h1>Welcome, <span id="userDisplay">Reader</span></h1>
         <div class="menu-grid">
             <div class="menu-card" onclick="location.href='catalogue.html'">
                 <div class="icon">📖</div>
-                <h3>Browse Catalogue</h3>
+                <h3>Catalogue</h3>
             </div>
             <div class="menu-card" onclick="location.href='cart.html'">
                 <div class="icon">🛒</div>
-                <h3>View My Cart</h3>
+                <h3>My Cart</h3>
             </div>
         </div>
     </div>
-    <script>document.getElementById('userDisplay').innerText = localStorage.getItem('user') || 'Reader';</script>
+    <script>document.getElementById('userDisplay').innerText = localStorage.getItem('user');</script>
 </body>
 </html>
