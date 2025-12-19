@@ -1,68 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>BookHaven - Secure Payment</title>
+    <meta charset="UTF-8">
+    <title>BookHaven - Payment</title>
     <link rel="stylesheet" href="base.css">
-    <link rel="stylesheet" href="payment.css">
+    <style>
+        .pay-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 400px; margin: 50px auto; }
+        .method-opt { border: 1px solid #ddd; padding: 12px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+    </style>
 </head>
 <body>
-    <div class="pay-wrapper">
-        <div class="pay-card">
-            <h2>Select Payment Method</h2>
-            
-            <div class="payment-options">
-                <label class="method-label">
-                    <input type="radio" name="payMethod" value="upi" checked onclick="toggleFields('upi')">
-                    <span>UPI (Google Pay, PhonePe)</span>
-                </label>
-
-                <label class="method-label">
-                    <input type="radio" name="payMethod" value="card" onclick="toggleFields('card')">
-                    <span>Debit / Credit Card</span>
-                </label>
-
-                <label class="method-label">
-                    <input type="radio" name="payMethod" value="net" onclick="toggleFields('net')">
-                    <span>Net Banking</span>
-                </label>
-            </div>
-
-            <hr>
-
-            <div id="upiFields">
-                <input type="text" placeholder="Enter UPI ID (e.g., user@okaxis)">
-            </div>
-
-            <div id="cardFields" style="display:none;">
-                <input type="text" placeholder="Card Number">
-                <div class="row">
-                    <input type="text" placeholder="MM/YY">
-                    <input type="password" placeholder="CVV">
-                </div>
-            </div>
-
-            <div id="netFields" style="display:none;">
-                <select class="full-select">
-                    <option>Select your Bank</option>
-                    <option>State Bank of India</option>
-                    <option>HDFC Bank</option>
-                    <option>ICICI Bank</option>
-                </select>
-            </div>
-
-            <button class="btn pay-btn" onclick="done()">Pay Now</button>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="home.html" class="brand-link">📚 BookHaven</a>
+            <div class="nav-links"><a href="cart.html">Back to Cart</a></div>
         </div>
+    </nav>
+    <div class="pay-card">
+        <h2>Payment</h2>
+        <div class="method-opt"><input type="radio" name="p" checked onclick="toggle('u')"> UPI</div>
+        <div class="method-opt"><input type="radio" name="p" onclick="toggle('c')"> Card</div>
+        
+        <div id="u-div"><input type="text" placeholder="UPI ID"></div>
+        <div id="c-div" style="display:none">
+            <input type="text" placeholder="Card Number">
+            <div style="display:flex; gap:10px"><input type="text" placeholder="MM/YY"> <input type="password" placeholder="CVV"></div>
+        </div>
+        <button class="btn" style="width:100%; margin-top:20px" onclick="done()">Complete Payment</button>
     </div>
-
     <script>
-        function toggleFields(method) {
-            document.getElementById('upiFields').style.display = method === 'upi' ? 'block' : 'none';
-            document.getElementById('cardFields').style.display = method === 'card' ? 'block' : 'none';
-            document.getElementById('netFields').style.display = method === 'net' ? 'block' : 'none';
+        function toggle(m) {
+            document.getElementById('u-div').style.display = (m === 'u') ? 'block' : 'none';
+            document.getElementById('c-div').style.display = (m === 'c') ? 'block' : 'none';
         }
-
         function done() {
-            alert("Payment Success! Your order has been placed.");
+            alert("Success!");
             localStorage.removeItem('cart');
             window.location.href = 'home.html';
         }
