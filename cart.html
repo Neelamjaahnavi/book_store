@@ -28,11 +28,9 @@
             const list = document.getElementById('cartList');
             const summary = document.getElementById('summaryArea');
             
-            // Clear containers to prevent stacking and clear old errors
             list.innerHTML = ""; 
             summary.innerHTML = ""; 
 
-            // Check if cart is empty and show Browse button
             if (cart.length === 0) {
                 list.innerHTML = `
                     <div style="text-align:center; padding: 50px 20px;">
@@ -46,18 +44,15 @@
             let total = 0;
 
             cart.forEach((item, i) => {
-                // FIX: Strips symbols like ₹ to ensure we only have a number for math
                 let priceValue = 0;
                 if (typeof item.price === 'string') {
-                    // This regex removes everything except digits and decimal points
                     priceValue = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
                 } else {
                     priceValue = Number(item.price) || 0;
                 }
                 
                 total += priceValue;
-
-                // Create orderly row
+                
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'cart-item';
                 itemDiv.innerHTML = `
@@ -73,7 +68,7 @@
                 list.appendChild(itemDiv);
             });
 
-            // Render summary with the single math result
+            
             summary.innerHTML = `
                 <div class="total-box">
                     <h2 style="margin-bottom: 15px;">Total: ₹${total.toFixed(2)}</h2>
