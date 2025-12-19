@@ -4,56 +4,82 @@
     <meta charset="UTF-8">
     <title>Book Store - Cart</title>
     <link rel="stylesheet" href="base.css">
-    <style>
-        .cart-item { display: flex; justify-content: space-between; background: white; padding: 20px; margin-bottom: 10px; border-radius: 8px; align-items: center; }
-        .total-box { background: white; padding: 20px; text-align: right; border-top: 4px solid var(--accent); margin-top: 20px; }
-    </style>
+    <link rel="stylesheet" href="cart.css">
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-content">
-            <a href="home.html" class="brand-link"> Book Store</a>
-            <div class="nav-links"><a href="catalogue.html">Continue Shopping</a></div>
+            <a href="home.html" class="brand-link">📚 Book Store</a>
+            <div class="nav-links">
+                <a href="catalogue.html">Continue Shopping</a>
+            </div>
         </div>
     </nav>
+
     <div class="container">
-        <h1>Your Cart</h1>
+        <h1>Your Shopping Cart</h1>
+        
         <div id="cartList"></div>
+        
         <div id="summaryArea"></div>
     </div>
+
     <script>
         function render() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const list = document.getElementById('cartList');
             const summary = document.getElementById('summaryArea');
             
-            list.innerHTML = ""; summary.innerHTML = ""; // FIX: Prevents stacking
+            list.innerHTML = ""; 
+            summary.innerHTML = ""; 
 
             if (cart.length === 0) {
-                list.innerHTML = "<h3>Your cart is empty.</h3>";
+                list.innerHTML = `
+                    <div style="text-align:center; padding: 40px;">
+                        <h3>Your cart is empty.</h3>
+                        <a href="catalogue.html" class="btn" style="text-decoration:none; display:inline-block; margin-top:15px;">Browse Books</a>
+                    </div>`;
                 return;
             }
 
             let total = 0;
+
             cart.forEach((item, i) => {
-                total += Number(item.price); // FIX: Ensures math calculation
-                list.innerHTML += `<div class="cart-item">
-                    <span><strong>${item.title}</strong></span>
-                    <span>₹${item.price} <button onclick="remove(${i})" style="color:red; border:none; background:none; cursor:pointer; margin-left:10px;">Remove</button></span>
-                </div>`;
+                const price = typeof item.price === 'string' 
+                    ? parseFloat(item.price.replace(/[^\d.]/g, '')) 
+                    : item.price;
+                
+                total += price;
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                itemDiv.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="font-size: 1.5rem;">📘</span>
+                        <strong>${item.title}</strong>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <span style="font-weight: bold;">₹${price}</span>
+                        <button onclick="remove(${i})" style="color:#ff4757; border: 1px solid #ff4757; background:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Remove</button>
+                    </div>
+                `;
+                list.appendChild(itemDiv);
             });
 
-            summary.innerHTML = `<div class="total-box">
-                <h2>Total: ₹${total}</h2>
-                <button class="btn" style="width:100%; margin-top:10px" onclick="location.href='payment.html'">Proceed to Payment</button>
-            </div>`;
+            summary.innerHTML = `
+                <div class="total-box">
+                    <h2 style="margin-bottom: 15px;">Total: ₹${total}</h2>
+                    <button class="btn" style="width:100%;" onclick="location.href='payment.html'">Proceed to Payment</button>
+                </div>`;
         }
+
         function remove(i) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart.splice(i, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
-            render();
+            render(); 
         }
+
         render();
     </script>
 </body>
