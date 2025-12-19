@@ -4,30 +4,30 @@
     <meta charset="UTF-8">
     <title>BookHaven - Catalogue</title>
     <link rel="stylesheet" href="base.css">
-    <link rel="stylesheet" href="catalogue.css">
+    <style>
+        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 30px; }
+        .book-card { background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .book-cover { font-size: 70px; height: 160px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 5px 10px 10px 5px; margin-bottom: 15px; box-shadow: -4px 4px 8px rgba(0,0,0,0.1); }
+    </style>
 </head>
 <body>
     <nav class="navbar">
-        <div class="brand">
+        <div class="nav-content">
             <a href="home.html" class="brand-link">📚 BookHaven</a>
-        </div>
-        <div class="nav-links">
-            <a href="home.html">Home</a>
-            <a href="cart.html" class="cart-badge">
-                Cart (<span id="cart-count">0</span>)
-            </a>
+            <div class="nav-links">
+                <a href="home.html">Home</a>
+                <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+            </div>
         </div>
     </nav>
-
     <div class="container">
         <h1>Book Catalogue</h1>
         <div class="book-grid" id="bookGrid"></div>
     </div>
-
     <script>
         const books = [
             { id: 1, title: "The Great Gatsby", price: 499, cover: "📕" },
-            { id: 2, title: "1984 Orwell", price: 350, cover: "📘" },
+            { id: 2, title: "1984", price: 350, cover: "📘" },
             { id: 3, title: "To Kill a Mockingbird", price: 450, cover: "📗" },
             { id: 4, title: "Brave New World", price: 399, cover: "📙" },
             { id: 5, title: "The Hobbit", price: 599, cover: "📔" },
@@ -39,43 +39,28 @@
         ];
 
         function display() {
-            const grid = document.getElementById('bookGrid');
-            // Check if grid exists before setting innerHTML
-            if(grid) {
-                grid.innerHTML = books.map(b => `
-                    <div class="book-card">
-                        <div class="book-cover">${b.cover}</div>
-                        <h3>${b.title}</h3>
-                        <p>Rs.${b.price}</p>
-                        <button class="btn" onclick="add(${b.id})">Add to Cart</button>
-                    </div>
-                `).join('');
-            }
+            document.getElementById('bookGrid').innerHTML = books.map(b => `
+                <div class="book-card">
+                    <div class="book-cover">${b.cover}</div>
+                    <h3>${b.title}</h3>
+                    <p>Rs.${b.price}</p>
+                    <button class="btn" onclick="add(${b.id})">Add to Cart</button>
+                </div>
+            `).join('');
         }
 
         function add(id) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const selectedBook = books.find(b => b.id === id);
-            
-            // Store only the necessary data
-            cart.push(selectedBook);
+            cart.push(books.find(b => b.id === id));
             localStorage.setItem('cart', JSON.stringify(cart));
-            
             update();
-            alert(`${selectedBook.title} added to cart!`);
         }
 
         function update() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const cartCountElement = document.getElementById('cart-count');
-            if(cartCountElement) {
-                cartCountElement.innerText = cart.length;
-            }
+            document.getElementById('cart-count').innerText = cart.length;
         }
-
-        // Initialize display and cart count on load
-        display(); 
-        update();
+        display(); update();
     </script>
 </body>
 </html>
