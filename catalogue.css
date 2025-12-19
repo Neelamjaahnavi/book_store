@@ -1,0 +1,25 @@
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+}
+
+.book-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.book-cover {
+    font-size: 70px;
+    height: 150px;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px 10px 10px 5px;
+    margin-bottom: 15px;
+    box-shadow: -4px 4px 8px rgba(0,0,0,0.1);
+}
