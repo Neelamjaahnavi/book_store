@@ -5,40 +5,126 @@
     <title>Book Store - Payment</title>
     <link rel="stylesheet" href="base.css">
     <style>
-        .pay-card { background: white; padding: 30px; border-radius: 12px; max-width: 450px; margin: 50px auto; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .opt { border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; }
+        .pay-card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            max-width: 450px; 
+            margin: 50px auto; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+        }
+
+        /* Orderly Payment Options */
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .opt { 
+            border: 1px solid #ddd; 
+            padding: 20px; 
+            border-radius: 8px; 
+            display: flex; 
+            align-items: center; 
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .opt:hover { background: #f9f9f9; }
+
+        /* Keeps radio button and text in an orderly line */
+        .opt input[type="radio"] {
+            margin-right: 60px; /* Space between dot and text */
+            transform: scale(1.2);
+            flex-shrink: 0;
+        }
+
+        .opt span {
+            font-size: 1.1rem;
+            text-align: right;
+            flex-grow: 1;
+        }
+
+        input[type="text"] { 
+            width: 100%; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            font-size: 1rem;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-content">
             <a href="home.html" class="brand-link">📚 Book Store</a>
-            <div class="nav-links"><a href="cart.html">Back to Cart</a></div>
+            <div class="nav-links"><a href="cart.html" style="color:white; text-decoration:none;">Back to Cart</a></div>
         </div>
     </nav>
+
     <div class="pay-card">
-        <h2>Checkout</h2>
-        <div class="opt"><input type="radio" name="pay" checked onclick="toggle('u')"> UPI (GPay/PhonePe)</div>
-        <div class="opt"><input type="radio" name="pay" onclick="toggle('c')"> Debit/Credit Card</div>
-        <div class="opt"><input type="radio" name="pay" onclick="toggle('n')"> Net Banking</div>
+        <h2 style="margin-bottom: 20px;">Checkout</h2>
+        
+        <div class="payment-methods">
+            <label class="opt">
+                <input type="radio" name="pay" checked onclick="toggle('u')"> 
+                <span>UPI <br><small>(GPay/PhonePe)</small></span>
+            </label>
+            
+            <label class="opt">
+                <input type="radio" name="pay" onclick="toggle('c')"> 
+                <span>Debit/Credit Card</span>
+            </label>
+            
+            <label class="opt">
+                <input type="radio" name="pay" onclick="toggle('n')"> 
+                <span>Net Banking</span>
+            </label>
+        </div>
 
         <div id="u-area"><input type="text" placeholder="Enter UPI ID"></div>
+        
         <div id="c-area" style="display:none">
             <input type="text" placeholder="Card Number">
-            <div style="display:flex; gap:10px;"><input type="text" placeholder="MM/YY"><input type="password" placeholder="CVV"></div>
+            <div style="display:flex; gap:10px;">
+                <input type="text" placeholder="MM/YY">
+                <input type="password" placeholder="CVV" style="width:100%; padding:15px; border:1px solid #ddd; border-radius:8px;">
+            </div>
         </div>
+        
         <div id="n-area" style="display:none">
-            <select style="width:100%; padding:10px; margin:10px 0;"><option>Select Bank</option><option>SBI</option><option>HDFC</option></select>
+            <select style="width:100%; padding:15px; margin:10px 0; border:1px solid #ddd; border-radius:8px;">
+                <option>Select Bank</option>
+                <option>SBI</option>
+                <option>HDFC</option>
+            </select>
         </div>
-        <button class="btn" style="width:100%; margin-top:20px" onclick="pay()">Complete Order</button>
+
+        <button class="btn" onclick="pay()">Complete Order</button>
     </div>
+
     <script>
         function toggle(m) {
             document.getElementById('u-area').style.display = (m==='u'?'block':'none');
             document.getElementById('c-area').style.display = (m==='c'?'block':'none');
             document.getElementById('n-area').style.display = (m==='n'?'block':'none');
         }
+
         function pay() {
             alert("Payment Successful! Books are on their way.");
             localStorage.removeItem('cart');
