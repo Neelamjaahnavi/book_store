@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>BookHaven - Catalogue</title>
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="catalogue.css">
 </head>
 <body>
     <nav class="navbar">
-        <h2>BookHaven</h2>
-        <div>
-            <a href="home.html">Home</a>
-            <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+        <div class="brand">
+            <a href="home.html" class="brand-link">📚 BookHaven</a>
         </div>
-   <nav class="navbar">
-    <div class="brand">
-        <a href="home.html" class="brand-link">📚 BookHaven</a>
-    </div>
-    
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="cart.html" class="cart-badge">
+                Cart (<span id="cart-count">0</span>)
+            </a>
+        </div>
     </nav>
+
+    <div class="container">
+        <h1>Book Catalogue</h1>
+        <div class="book-grid" id="bookGrid"></div>
+    </div>
+
     <script>
         const books = [
             { id: 1, title: "The Great Gatsby", price: 499, cover: "📕" },
@@ -33,29 +39,43 @@
         ];
 
         function display() {
-            document.getElementById('bookGrid').innerHTML = books.map(b => `
-                <div class="book-card">
-                    <div class="book-cover">${b.cover}</div>
-                    <h3>${b.title}</h3>
-                    <p>Rs.${b.price}</p>
-                    <button class="btn" onclick="add(${b.id})">Add to Cart</button>
-                </div>
-            `).join('');
+            const grid = document.getElementById('bookGrid');
+            // Check if grid exists before setting innerHTML
+            if(grid) {
+                grid.innerHTML = books.map(b => `
+                    <div class="book-card">
+                        <div class="book-cover">${b.cover}</div>
+                        <h3>${b.title}</h3>
+                        <p>Rs.${b.price}</p>
+                        <button class="btn" onclick="add(${b.id})">Add to Cart</button>
+                    </div>
+                `).join('');
+            }
         }
 
         function add(id) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart.push(books.find(b => b.id === id));
+            const selectedBook = books.find(b => b.id === id);
+            
+            // Store only the necessary data
+            cart.push(selectedBook);
             localStorage.setItem('cart', JSON.stringify(cart));
+            
             update();
-            alert("Added to cart!");
+            alert(`${selectedBook.title} added to cart!`);
         }
 
         function update() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            document.getElementById('cart-count').innerText = cart.length;
+            const cartCountElement = document.getElementById('cart-count');
+            if(cartCountElement) {
+                cartCountElement.innerText = cart.length;
+            }
         }
-        display(); update();
+
+        // Initialize display and cart count on load
+        display(); 
+        update();
     </script>
 </body>
 </html>
