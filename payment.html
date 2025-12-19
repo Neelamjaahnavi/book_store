@@ -2,40 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BookHaven - Payment</title>
+    <title>Book Store - Payment</title>
     <link rel="stylesheet" href="base.css">
     <style>
-        .pay-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 400px; margin: 50px auto; }
-        .method-opt { border: 1px solid #ddd; padding: 12px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        input[type="text"], input[type="password"] { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        .pay-card { background: white; padding: 30px; border-radius: 12px; max-width: 450px; margin: 50px auto; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .opt { border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-content">
-            <a href="home.html" class="brand-link">📚 BookHaven</a>
+            <a href="home.html" class="brand-link">📚 Book Store</a>
             <div class="nav-links"><a href="cart.html">Back to Cart</a></div>
         </div>
     </nav>
     <div class="pay-card">
-        <h2>Payment</h2>
-        <div class="method-opt"><input type="radio" name="p" checked onclick="toggle('u')"> UPI</div>
-        <div class="method-opt"><input type="radio" name="p" onclick="toggle('c')"> Card</div>
-        
-        <div id="u-div"><input type="text" placeholder="UPI ID"></div>
-        <div id="c-div" style="display:none">
+        <h2>Checkout</h2>
+        <div class="opt"><input type="radio" name="pay" checked onclick="toggle('u')"> UPI (GPay/PhonePe)</div>
+        <div class="opt"><input type="radio" name="pay" onclick="toggle('c')"> Debit/Credit Card</div>
+        <div class="opt"><input type="radio" name="pay" onclick="toggle('n')"> Net Banking</div>
+
+        <div id="u-area"><input type="text" placeholder="Enter UPI ID"></div>
+        <div id="c-area" style="display:none">
             <input type="text" placeholder="Card Number">
-            <div style="display:flex; gap:10px"><input type="text" placeholder="MM/YY"> <input type="password" placeholder="CVV"></div>
+            <div style="display:flex; gap:10px;"><input type="text" placeholder="MM/YY"><input type="password" placeholder="CVV"></div>
         </div>
-        <button class="btn" style="width:100%; margin-top:20px" onclick="done()">Complete Payment</button>
+        <div id="n-area" style="display:none">
+            <select style="width:100%; padding:10px; margin:10px 0;"><option>Select Bank</option><option>SBI</option><option>HDFC</option></select>
+        </div>
+        <button class="btn" style="width:100%; margin-top:20px" onclick="pay()">Complete Order</button>
     </div>
     <script>
         function toggle(m) {
-            document.getElementById('u-div').style.display = (m === 'u') ? 'block' : 'none';
-            document.getElementById('c-div').style.display = (m === 'c') ? 'block' : 'none';
+            document.getElementById('u-area').style.display = (m==='u'?'block':'none');
+            document.getElementById('c-area').style.display = (m==='c'?'block':'none');
+            document.getElementById('n-area').style.display = (m==='n'?'block':'none');
         }
-        function done() {
-            alert("Success!");
+        function pay() {
+            alert("Payment Successful! Books are on their way.");
             localStorage.removeItem('cart');
             window.location.href = 'home.html';
         }
