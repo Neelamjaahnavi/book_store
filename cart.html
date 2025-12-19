@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>BookHaven - Cart</title>
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="cart.css">
+</head>
+<body>
+    <nav class="navbar">
+        <h2>BookHaven</h2>
+        <a href="catalogue.html">Back to Catalogue</a>
+    </nav>
+    <div class="container cart-page">
+        <h1>Your Shopping Cart</h1>
+        <div id="cartList"></div>
+        <div id="cartSummary" class="summary-box"></div>
+    </div>
+    <script>
+        function render() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const list = document.getElementById('cartList');
+            const summary = document.getElementById('cartSummary');
+
+            if (cart.length === 0) {
+                list.innerHTML = "<h3>Your cart is empty</h3>";
+                summary.innerHTML = "";
+                return;
+            }
+
+            list.innerHTML = cart.map((item, i) => `
+                <div class="cart-item">
+                    <span>📖 ${item.title}</span>
+                    <span>₹${item.price} <button class="remove-btn" onclick="remove(${i})">Remove</button></span>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, b) => sum + b.price, 0);
+            summary.innerHTML = `
+                <h2>Total: ₹${total}</h2>
+                <button class="btn checkout-btn" onclick="location.href='payment.html'">Proceed to Payment</button>
+            `;
+        }
+        function remove(i) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(i, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            render();
+        }
+        render();
+    </script>
+</body>
+</html>
